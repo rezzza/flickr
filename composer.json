@@ -1,0 +1,30 @@
+{
+    "name": "rezzza/flickr",
+    "description": "Flickr API Wrapper",
+    "keywords": ["flickr"],
+    "type": "standalone",
+    "homepage": "https://github.com/rezzza/flickr",
+    "license": "MIT",
+    "authors": [{
+        "name": "Community contributors",
+        "homepage": "https://github.com/rezzza/flickr/contributors"
+    }],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "suggest": {
+        "guzzle/guzzle": "HTTP wrapper"
+    },
+    "require-dev": {
+        "atoum/atoum": "dev-master",
+        "guzzle/http": "3.*"
+    },
+    "autoload":     {
+        "psr-0": {
+            "Rezzza\\Flickr": "src/"
+        }
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}
