@@ -39,6 +39,14 @@ class ApiFactory
     }
 
     /**
+     * @return Metadata
+     */
+    public function getMetadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
      * @param string $service    service
      * @param array  $parameters parameters
      * @param string $endpoint   endpoint
