@@ -35,6 +35,11 @@ class Metadata
     protected $uploadEndpoint = 'http://up.flickr.com/services/upload/';
 
     /**
+     * @var string
+     */
+    protected $replaceEndpoint = 'http://up.flickr.com/services/replace/';
+
+    /**
      * @param string $apiKey apiKey
      * @param string $secret secret
      */
@@ -93,6 +98,14 @@ class Metadata
     }
 
     /**
+     * @return string
+     */
+    public function getReplaceEndpoint()
+    {
+        return $this->replaceEndpoint;
+    }
+
+    /**
      * @param string $v v
      *
      * @return Metadata
@@ -129,4 +142,15 @@ class Metadata
         return $this;
     }
 
+    /**
+     * @param string $v v
+     *
+     * @return Metadata
+     */
+    public function setReplaceEndpoint($v)
+    {
+        $this->replaceEndpoint = $v;
+
+        return $this;
+    }
 }

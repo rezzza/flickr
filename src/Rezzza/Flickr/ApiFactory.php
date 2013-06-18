@@ -81,13 +81,13 @@ class ApiFactory
     }
 
     /**
-     * @param string  $file        file
-     * @param string  $title       title
-     * @param string  $description description
-     * @param string  $tags        tags
-     * @param boolean $isPublic    isPublic
-     * @param boolean $isFriend    isFriend
-     * @param boolean $isFamily    isFamily
+     * @param string       $file        file
+     * @param string       $title       title
+     * @param string       $description description
+     * @param string|array $tags        tags
+     * @param boolean      $isPublic    isPublic
+     * @param boolean      $isFriend    isFriend
+     * @param boolean      $isFamily    isFamily
      *
      * @return \SimpleXMLElement
      */
@@ -99,17 +99,53 @@ class ApiFactory
             throw new \LogicException(sprintf('File "%s" does not exists.', $file));
         }
 
+        if (is_array($tags)) {
+            foreach ($tags as $k => $v) {
+                $tags[$k] = sprintf('"%s"', $v);
+            }
+
+            $tags = implode(' ', $tags);
+        }
+
         $parameters = array(
             'photo'       => '@'.$path,
             'title'       => $title,
             'description' => $description,
             'tags'        => $tags,
-            'is_public'   => $isPublic,
-            'is_friend'   => $isFriend,
-            'is_family'   => $isFamily,
+            'is_public'   => (int) $isPublic,
+            'is_friend'   => (int) $isFriend,
+            'is_family'   => (int) $isFamily,
         );
 
         return $this->call(null, $parameters, $this->metadata->getUploadEndpoint());
+    }
+
+    /**
+     * Replace an exitant photo by a new one
+     *
+     * http://www.flickr.com/services/api/replace.api.html
+     *
+     * @param string  $photoId photoId
+     * @param string  $file    file
+     * @param boolean $async   async
+     *
+     * @return \SimpleXMLElement
+     */
+    public function replace($photoId, $file, $async = false)
+    {
+        $path = realpath($file);
+
+        if (false === $path) {
+            throw new \LogicException(sprintf('File "%s" does not exists.', $file));
+        }
+
+        $parameters = array(
+            'photo'    => '@'.$path,
+            'photo_id' => $photoId,
+            'async'    => $async,
+        );
+
+        return $this->call(null, $parameters, $this->metadata->getReplaceEndpoint());
     }
 
     /**
