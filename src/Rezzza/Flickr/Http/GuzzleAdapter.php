@@ -12,6 +12,14 @@ use Guzzle\Http\Client;
  */
 class GuzzleAdapter implements AdapterInterface
 {
+    
+    private $client;
+    
+    public function __construct()
+    {
+        $this->client  = new Client('', array('redirect.disable' => true));
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -21,12 +29,19 @@ class GuzzleAdapter implements AdapterInterface
             throw new \LogicException('Please, install guzzle/http before using this adapter.');
         }
 
-        $client  = new Client('', array('redirect.disable' => true));
-        $request = $client->post($url, $headers, $data);
+        $request = $this->client->post($url, $headers, $data);
         // flickr does not supports this header and return a 417 http code during upload
         $request->removeHeader('Expect');
 
         return $request->send()
             ->xml();
+    }
+    
+    /**
+     * @return $client
+     */
+    public function getClient()
+    {
+        return $this->client;
     }
 }
