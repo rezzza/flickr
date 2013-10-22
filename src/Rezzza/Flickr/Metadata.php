@@ -27,17 +27,17 @@ class Metadata
     /**
      * @var string
      */
-    protected $endpoint = 'http://api.flickr.com/services/rest/';
+    protected $endpoint = 'https://api.flickr.com/services/rest/';
 
     /**
      * @var string
      */
-    protected $uploadEndpoint = 'http://up.flickr.com/services/upload/';
+    protected $uploadEndpoint = 'https://up.flickr.com/services/upload/';
 
     /**
      * @var string
      */
-    protected $replaceEndpoint = 'http://up.flickr.com/services/replace/';
+    protected $replaceEndpoint = 'https://up.flickr.com/services/replace/';
 
     /**
      * @param string $apiKey apiKey
