@@ -1,0 +1,14 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Leonardo
+ * Date: 25/02/14
+ * Time: 22:37
+ */
+
+return array(
+    'key' => '',
+    'secret' => '',
+    'access_token' => '',
+    'secret_access_token' => ''
+);

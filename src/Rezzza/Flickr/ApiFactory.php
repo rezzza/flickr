@@ -55,29 +55,27 @@ class ApiFactory
      */
     public function call($service = null, array $parameters = array(), $endpoint = null)
     {
-        if (null === $endpoint) {
-            $endpoint = $this->metadata->getEndpoint();
-        }
-
-        $default = array(
-            'api_key' => $this->metadata->getApiKey(),
-            'format'  => 'rest',
-        );
-
-        if ($service) {
-            $default['method'] = $service;
-        }
-
-        $parameters = array_merge($default, $parameters);
-        $parameters = array_filter($parameters, function($value) {
-            return null !== $value;
-        });
-
-        $parameters['api_sig'] = $this->buildSignature($parameters);
-
-        $this->addOAuthParameters($endpoint, $parameters);
+        $parameters = $this->buildParams($service, $parameters, $endpoint);
 
         return $this->http->post($endpoint, $parameters);
+    }
+
+    /**
+     * @param array $calls
+     * An array of Calls
+     * Each call is an array with keys: service, parameters and endpoint
+     *
+     * @return \SimpleXMLElement[]
+     */
+    public function multiCall(array $calls)
+    {
+        $requests = array();
+        foreach ($calls as $call) {
+            $parameters = $this->buildParams($call['service'], $call['parameters'], $call['endpoint']);
+            $requests[] = array('url' => $call['endpoint'], 'data' => $parameters, 'headers' => array());
+        }
+
+        return $this->http->multiPost($requests);
     }
 
     /**
@@ -210,5 +208,39 @@ class ApiFactory
         }
 
         return md5($sigUnhashed);
+    }
+
+    /**
+     * @param string $service
+     * @param array  $parameters
+     * @param string $endpoint
+     *
+     * @return array
+     */
+    private function buildParams($service, array $parameters, &$endpoint)
+    {
+        if (null === $endpoint) {
+            $endpoint = $this->metadata->getEndpoint();
+        }
+
+        $default = array(
+            'api_key' => $this->metadata->getApiKey(),
+            'format'  => 'rest',
+        );
+
+        if ($service) {
+            $default['method'] = $service;
+        }
+
+        $parameters = array_merge($default, $parameters);
+        $parameters = array_filter($parameters, function ($value) {
+            return null !== $value;
+        });
+
+        $parameters['api_sig'] = $this->buildSignature($parameters);
+
+        $this->addOAuthParameters($endpoint, $parameters);
+
+        return $parameters;
     }
 }
