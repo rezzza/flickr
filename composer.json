@@ -13,13 +13,12 @@
         "php": ">=5.3.2"
     },
     "suggest": {
-        "guzzle/guzzle": "HTTP wrapper"
+        "guzzle/guzzle": "HTTP wrapper",
+        "guzzle/http": "Guzzle Adapter for http requests"
     },
     "require-dev": {
-        "guzzle/http": "3.*"
-    },
-    "suggest": {
-        "guzzle/http": "Guzzle Adapter for http requests"
+        "guzzle/http": "3.*",
+        "phpunit/phpunit": "3.7.32"
     },
     "autoload":     {
         "psr-0": {

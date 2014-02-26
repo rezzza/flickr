@@ -3,6 +3,7 @@
 namespace Rezzza\Flickr\Http;
 
 use Guzzle\Http\Client;
+use Guzzle\Http\Message\RequestInterface;
 
 /**
  * GuzzleAdapter
@@ -36,6 +37,33 @@ class GuzzleAdapter implements AdapterInterface
         return $request->send()
             ->xml();
     }
+
+    /**
+     * @param array $requests
+     * An array of Requests
+     * Each Request is an array with keys: url, data and headers
+     *
+     * @return \SimpleXMLElement[]
+     */
+    public function multiPost(array $requests)
+    {
+        $multi_request = $this->client->getCurlMulti();
+        foreach ($requests as &$request) {
+            $request = $this->client->post($request['url'], $request['headers'], $request['data']);
+            $multi_request->add($request);
+        }
+        unset($request);
+
+        $multi_request->send();
+
+        $responses = array();
+        /** @var RequestInterface[] $requests */
+        foreach ($requests as $request) {
+            $responses[] = $request->getResponse()->xml();
+        }
+
+        return $responses;
+    }
     
     /**
      * @return $client
@@ -44,4 +72,5 @@ class GuzzleAdapter implements AdapterInterface
     {
         return $this->client;
     }
+
 }
